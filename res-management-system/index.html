@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Resource Management System for tracking equipment, rooms, and tools.">
+    <title>Resource Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 id="main-title">Resource Management System</h1>
+            <div class="theme-toggle">
+                <label for="themeSwitch" class="sr-only">Toggle dark mode</label>
+                <input type="checkbox" id="themeSwitch" aria-label="Toggle dark mode">
+                <span>Dark Mode</span>
+            </div>
+        </header>
+
+        <div id="loading" aria-live="polite">Loading...</div>
+
+        <main id="main-content" style="display: none;">
+            <section class="controls">
+                <button id="addResourceBtn" class="btn btn-primary" aria-label="Add new resource">Add Resource</button>
+                <div class="search-section">
+                    <label for="searchInput" class="sr-only">Search resources</label>
+                    <input type="text" id="searchInput" placeholder="Search by name or description..." aria-label="Search resources">
+                </div>
+                <div class="export-import">
+                    <button id="exportBtn" class="btn btn-secondary" aria-label="Export resources">Export</button>
+                    <input type="file" id="importFile" accept=".json" style="display: none;" aria-label="Import resources">
+                    <button id="importBtn" class="btn btn-secondary" aria-label="Import resources">Import</button>
+                </div>
+            </section>
+
+            <div id="addResourceModal" class="modal" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+                <div class="modal-content">
+                    <h2 id="modalTitle" class="sr-only">Add/Edit Resource</h2>
+                    <button id="closeModal" class="close" aria-label="Close modal">&times;</button>
+                    <form id="addResourceForm" class="resource-form">
+                        <div class="form-group">
+                            <label for="resourceName">Name <span class="required" aria-hidden="true">*</span></label>
+                            <input type="text" id="resourceName" required aria-required="true">
+                        </div>
+                        <div class="form-group">
+                            <label for="resourceType">Type <span class="required" aria-hidden="true">*</span></label>
+                            <select id="resourceType" required aria-required="true">
+                                <option value="">Select Type</option>
+                                <option value="Equipment">Equipment</option>
+                                <option value="Room">Room</option>
+                                <option value="Tool">Tool</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="resourceStatus">Status <span class="required" aria-hidden="true">*</span></label>
+                            <select id="resourceStatus" required aria-required="true">
+                                <option value="">Select Status</option>
+                                <option value="Available">Available</option>
+                                <option value="In Use">In Use</option>
+                                <option value="Maintenance">Maintenance</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="resourceDescription">Description</label>
+                            <textarea id="resourceDescription" aria-describedby="descriptionHelp"></textarea>
+                            <small id="descriptionHelp" class="form-help">Optional description of the resource.</small>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Add Resource</button>
+                            <button type="button" id="cancelBtn" class="btn btn-secondary">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <section class="filter-section">
+                <label for="filterType">Filter by Type</label>
+                <select id="filterType" aria-label="Filter resources by type">
+                    <option value="All Types">All Types</option>
+                    <option value="Equipment">Equipment</option>
+                    <option value="Room">Room</option>
+                    <option value="Tool">Tool</option>
+                </select>
+            </section>
+
+            <section class="resource-table" aria-live="polite">
+                <table id="resourceList" role="grid">
+                    <thead>
+                        <tr>
+                            <th scope="col" role="columnheader" aria-sort="none">
+                                <button class="sort-btn" onclick="sortResources('name')" aria-label="Sort by name">
+                                    Name <span class="sort-icon" id="sort-name">&#8645;</span>
+                                </button>
+                            </th>
+                            <th scope="col" role="columnheader" aria-sort="none">
+                                <button class="sort-btn" onclick="sortResources('type')" aria-label="Sort by type">
+                                    Type <span class="sort-icon" id="sort-type">&#8645;</span>
+                                </button>
+                            </th>
+                            <th scope="col" role="columnheader" aria-sort="none">
+                                <button class="sort-btn" onclick="sortResources('status')" aria-label="Sort by status">
+                                    Status <span class="sort-icon" id="sort-status">&#8645;</span>
+                                </button>
+                            </th>
+                            <th scope="col" role="columnheader">Description</th>
+                            <th scope="col" role="columnheader">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div id="no-resources">No resources available.</div>
+            </section>
+
+            <section class="pagination" id="pagination" aria-label="Pagination controls">
+                <button id="prevPage" class="btn btn-secondary" disabled aria-label="Previous page">Previous</button>
+                <span id="pageInfo" aria-live="polite">Page 1 of 1</span>
+                <button id="nextPage" class="btn btn-secondary" disabled aria-label="Next page">Next</button>
+            </section>
+        </main>
+    </div>
+
+    <div id="toast" class="toast" role="alert" aria-live="assertive"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
